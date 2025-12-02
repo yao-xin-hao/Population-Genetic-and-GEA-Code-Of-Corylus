@@ -9,7 +9,7 @@ Branch Overview
 01. call_snp
 https://github.com/yao-xin-hao/Population-Genetic-and-GEA-Code-Of-Corylus/tree/01.call_snp
 A Snakemake workflow for SNP calling based on the GATK pipeline.
-This branch processes raw BAM files into high‑quality VCF files, including:
+This branch processes raw fastq files to BAM files into high‑quality VCF files, including:
 1、GATK best‑practice variant discovery
 2、Common filtering steps
 3、Custom helper scripts
