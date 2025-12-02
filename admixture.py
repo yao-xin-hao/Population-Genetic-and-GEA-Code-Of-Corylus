@@ -8,5 +8,5 @@ os.system('plink --noweb --file Corylus --make-bed --out Corylus')
 def structure(x):
 	os.system('%s --cv Corylus.bed %d | tee log%d.out'%(admixture,x,x))
 po1=Pool(4)
-po1.map(structure,list(range(4,8)))
+po1.map(structure,list(range(1,10)))
 po1.close()	
