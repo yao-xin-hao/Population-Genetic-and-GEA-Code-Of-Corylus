@@ -1,2 +1,19 @@
-# Population-Genetic-and-GEA-Code-Of-Corylus
-The Full Process from SNP Calling to Environmental Association
+It consists of three parts: NJ, PCA, and admixture.
+#Admixture-running
+01.ad.sh
+02.make_structure_data.sh
+admixture.py
+kn.dataR.py
+#Admixture-Visualization
+plot_structure.R
+pops_samples_structure_sort
+tt.txt
+
+#NJ tree
+01.vcf2phy.sh
+02.nj.py
+02.nj.sh
+
+#PCA
+run_PCA
+zz.admixture_pca_nj.pl
