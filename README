@@ -1,0 +1,13 @@
+#linux
+#keep and filter maf/miss sample by vcftools
+#sort by chr
+#phase by beagle
+vcftools --gzvcf sp.vcf.gz --keep keep_sample.txt --recode --recode-INFO-all --stdout|bgzip -c > sp.keep.vcf.gz
+vcftools --gzvcf sp.keep.vcf.gz --max-missing 0.8 --maf 0.05 --recode --recode-INFO-all --stdout |bgzip -c > sp.keep.miss08.maf005.vcf.gz
+bgzip -d sp.keep.miss08.maf005.vcf.gz
+cp ../sort_chr .
+sed  's/|/\//g' sp.keep.miss08.maf005.vcf |bgzip -c > sp.keep.miss08.maf005.vcf.gz
+python3 ~/scripts/WGS/vcf_filter/snp_ID.py sp.keep.miss08.maf005.vcf.gz | bgzip -c > ID.vcf.gz
+python3 /data/00/user/user153/script/08.for_vcf/filleter/change_str_forGATK4.py ID.vcf.gz| bgzip -c > ID.str.vcf.gz
+python3 /data/00/user/user153/script/02.contig2chomosome/sort.vcf_v2.py ID.str.vcf.gz ./sort_chr | bgzip -c > ID.str.sort.vcf.gz
+java -jar -Xmx60G /data/00/software/beagle/beagle.18May20.d20.jar gt=ID.str.sort.vcf.gz out=ID.str.sort.phase  nthreads=20
