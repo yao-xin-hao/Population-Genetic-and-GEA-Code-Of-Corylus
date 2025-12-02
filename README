@@ -1,8 +1,50 @@
-# Population-Genetic-and-GEA-Code-Of-Corylus
-The Full Process from SNP Calling to Environmental Association
-Brach
-01.call_snp------A snakemake flow for gatk
-02.script_process_for_vcf------some script process vcf
-03.population_structure------PCA、nj tree、admixture by vcf
-04.GEA------LFMM and RDA by vcf
-05.IBD_IBE------Geographical isolation and environmental isolation Calculation
+####################################################################################################################################################
+Population-Genetic-and-GEA-Code-Of-Corylus
+####################################################################################################################################################
+The full workflow from SNP calling to population genetics and environmental association analyses.
+Some steps involve third‑party software; if citation is required, please refer to the related GitHub pages or contact me.
+####################################################################################################################################################
+Branch Overview
+
+01. call_snp
+A Snakemake workflow for SNP calling based on the GATK pipeline.
+This branch processes raw BAM files into high‑quality VCF files, including:
+1、GATK best‑practice variant discovery
+2、Common filtering steps
+3、Custom helper scripts
+4、Generation of high-quality SNP sets
+
+02. script_process_for_vcf
+A collection of useful scripts for VCF processing.
+Main purpose:
+1、Filling missing SNPs
+3、Minor data cleanup
+4、Preparing VCF files for downstream analyses
+
+03. population_structure
+Workflows and scripts for population structure analysis starting directly from VCF input.
+Includes both analysis and visualization:
+1、PCA
+2、Neighbor‑Joining (NJ) tree
+3、Admixture analysis
+4、Results from these methods are combined to infer population structure.
+
+04. GEA (Environmental Association Analysis)
+Scripts and workflows for environmental association studies.
+Includes:
+1、Extraction and processing of environmental variables
+2、LFMM workflow (considers population structure)
+3、RDA workflow (considers multiple environmental predictors)
+
+05. IBD_IBE (Isolation by Distance / Environment)
+Scripts for evaluating geographic and environmental isolation using VCF input.
+This branch generates:
+1、Geographic distance matrices
+2、Genetic differentiation matrices
+3、Environmental distance matrices
+4、And performs Mantel tests to evaluate correlations between:
+Environment ↔ Genetic differentiation
+Geography ↔ Genetic differentiation
+Visualization scripts are included.
+
+
