@@ -4,3 +4,5 @@ Brach
 01.call_snp------A snakemake flow for gatk
 02.script_process_for_vcf------some script process vcf
 03.population_structure------PCA、nj tree、admixture by vcf
+04.GEA------LFMM and RDA by vcf
+05.IBD_IBE------Geographical isolation and environmental isolation Calculation
