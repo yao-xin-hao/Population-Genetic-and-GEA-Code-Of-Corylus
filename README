@@ -1,0 +1,81 @@
+############################################################################
+gatk_workflow
+author:yaoxh
+date:2024_06_27
+Snakemakepath:/data/00/user/user250/my_snakemake/gatk/Snakemake
+config_path:/data/00/user/user250/my_snakemake/gatk/config.yaml
+README_path:/data/00/user/user250/my_snakemake/gatk/README
+#####################################################################################
+#配置1
+conda create -n gatk的环境
+conda activate gatk
+conda install snakemake
+
+#配置2
+conda create -n gatk --clone /data/00/user/user250/miniconda3/envs/gatk
+conda activate gatk
+#######################################################################################
+#该流程用的为4.2的非java版本,在snakemake中用2> 定向log文件
+/data/00/user/user153/software/gatk4.2.0/gatk --java-options '-Xmx10g -Djava.io.tmpdir=tmp' HaplotypeCaller -R {input.ref} -I {input.bam} -O {output} --emit-ref-confidence GVCF --native-pair-hmm-threads 6 2> {log}
+
+#可以改为java版本的3.8，更稳定
+#基本命令为
+java -Xmx10g -Xms10g -jar /data/00/software/gatk/GenomeAnalysisTK-3.8-1-0-gf15c1c3ef/GenomeAnalysisTK.jar  -T HaplotypeCaller -R {} -I {} -O {}
+######################################################################################
+#流程图
+snakemake --dag -s Snakefile | dot -Tsvg > dag.svg
+#直接跑到rule的输出位置
+snakemake --core ? outputfile
+#跑完rule all
+snakemake --core ? -s Snakefile   #--core规定的是总的核心数
+#调试
+snakemake -np -s Snakefile
+###############################################################################
+#配置文件config.yaml中
+1、软件的路径(不改)
+2、reference.fai就是参考基因组的索引文件，samtools faidx fasta就可以得到(不改)
+3、sample.txt就是样本名，一列（：后改为自己的）
+4、depth.txt为深度信息，前一列为样本名，后一列为深度（：后改为自己的）
+5、bed为bed文件，三列。可以由bedtools -i input.vcf/input.gff > output.bed得到（改为自己的）
+#################################################################
+命名都不要改
+mkdir bam
+cd bam 
+把所有的bam和索引ln -s 到bam中
+mkdir genome
+cd genome需要将参考基因组链接ln -s到genome,并且命名为reference.dict  reference.fasta  reference.fasta.fai
+mkdir tmp
+touch sample.txt ,文件中包含样本名.
+cp -r /data/00/user/user250/my_snakemake/gatk/scripts .
+################################生成bam############################################
+最好按以下实验室的流程来，如果产生文件有不同命名需要更改Snakefile中对应的名字
+#1...................clean   需要sample.txt, mkdir一个clean
+for i in `cat sample.txt`;do echo "/data/00/software/fastp/fastp_20190417/fastp -q 20 -l 50 -W 4 -5 -3 -h  /mnt/disk1/backup/yang/user250/01.clean/${i}.report.html -w 10 -i /mnt/disk1/backup/yang/user250/00.reads/${i}_1.fq.gz -o /mnt/disk1/backup/yang/user250/01.clean/${i}_1.clean.fq.gz -I /mnt/disk1/backup/yang/user250/00.reads/${i}_2.fq.gz -O /mnt/disk1/backup/yang/user250/01.clean/${i}_2.clean.fq.gz > /mnt/disk1/backup/yang/user250/01.clean/${i}.report.log 2>&1" >>clean.sh;done
+
+parallel -j 30 < clean.sh ;#并行多少条，自己看
+python3 /data/00/slurm.10.buildJob.py -c 5 -m 10 -i clean.sh -s 1 -d 提交任务,-c 线程 -m 内存, -i 要交的任务 -s 分割 -d 提交
+
+#####################无端插入###################
+如果需要提交snakemake任务，可以参考以下
+echo "snakemake --core 10 -s Snakefile" > gatk.sh
+python3 /data/00/slurm.10.buildJob.py -c 5 -m 10 -i gatk.sh -s 1 -d
+#直接跑
+snakemake --core ?? -p -s Snakefile
+#可以跑到想要的rule
+snakemake --core ?? -p miss_maf/sp.miss08.vcf.gz 这个文件看Snakefile中想要的output那一步
+
+#####################无端插入#########################
+#2..........mapping 需要师兄的脚本/mnt/disk1/backup/yang/user250/02.map/1.map_sambamba.pl ；mkdir tmp map ; mkdir 02.map ;clean.list为第一步clean完的所有样本绝对路径
+perl /data/01/user153/hazel_2022_2/02.map/1.map_sambamba.pl -l clean.list -o /mnt/disk1/backup/yang/user250/02.map/map -R /mnt/disk1/backup/yang/user250/00.ref_pzel/final.fasta -T /mnt/disk1/backup/yang/user250/tmp  >> map.sh
+
+parallel -j 30 < map.sh
+
+mapping完就得到了02.map/map路径，这个路径里面就有所有的需要的bam文件了
+
+
+
+
+
+
+
+

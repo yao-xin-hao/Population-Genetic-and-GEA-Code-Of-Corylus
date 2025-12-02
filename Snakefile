@@ -30,10 +30,11 @@ rule make_gvcf:
         bam="bam/{sample}.dedup.bam"
     output:
         "g.vcf/{sample}.g.vcf.gz"
+    threads: 6
     log:
         "log/make_gvcf/{sample}.log"
     shell:
-        "{config[software][gatk]} --java-options '-Xmx10g -Djava.io.tmpdir=tmp' HaplotypeCaller -R {input.ref} -I {input.bam} -O {output} --emit-ref-confidence GVCF --native-pair-hmm-threads 3 2> {log}"
+        "{config[software][gatk]} --java-options '-Xmx10g -Djava.io.tmpdir=tmp' HaplotypeCaller -R {input.ref} -I {input.bam} -O {output} --emit-ref-confidence GVCF --native-pair-hmm-threads 6 2> {log}"
 
 #def to_all_gvcf(gvcf_list):
 #    return ' '.join(f"-V {g} \n" for g in gvcf_list)
@@ -59,7 +60,7 @@ rule combine_gvcf:
         "combine/{chr}.g.vcf.gz"
     log:
         "log/combine_gvcf/{chr}.log.log"
-    threads: 8
+    threads: 6
     shell:
         """
         {config[software][gatk]} --java-options '-Xmx10g -Djava.io.tmpdir=tmp' CombineGVCFs \
@@ -86,6 +87,7 @@ rule genotype:
         "genotype/{chr}.gvcf.gz"
     log:
         "log/genotype/{chr}.log.log"
+    threads: 6
     shell:
         "{config[software][gatk]} --java-options '-Xmx10g -Djava.io.tmpdir=tmp' GenotypeGVCFs -R {input.ref} -V {input.gvcf} -O {output} 2> {log}"
 
@@ -95,6 +97,7 @@ rule selectvariants:
     output:
         indel="selectvariants/{chr}.INDEL.vcf.gz",
         snp="selectvariants/{chr}.SNP.vcf.gz"
+    threads: 6
     log:
         snplog="log/selectvariants/{chr}.SNP.log.log",
         indellog="log/selectvariants/{chr}.INDEL.log.log"
@@ -114,6 +117,7 @@ rule variationfiltration:
     log:
         indel="log/variationfiltration/{chr}.INDEL.HDflt.log.log",
         snp="log/variationfiltration/{chr}.SNP.HDflt.log.log"
+    threads: 6
     shell:
         """
         {config[software][gatk]} --java-options '-Xmx10g -Djava.io.tmpdir=tmp' VariantFiltration -V {input.indel} -filter 'QD < 2.0' --filter-name 'QD2' -filter 'QUAL < 30.0' --filter-name 'QUAL30' -filter 'FS > 200.0' --filter-name 'FS200' -filter 'ReadPosRankSum < -20.0' --filter-name 'ReadPosRankSum-20' -O {output.indel} 2> {log.indel};
@@ -193,7 +197,6 @@ rule concat:
         "concat_gvcf_list.txt"
     output:
         "final_vcf/sp.vcf.gz"
-    threads: 6
     log:
         "log/concat/sp.log"
     shell:
@@ -235,3 +238,5 @@ rule maf:
         {config[software][vcftools]} --gzvcf {input.miss06} --maf 0.05  --recode --recode-INFO-all --stdout |pigz -p 2 -c > {output.miss06_maf05} 2> {log.miss06_maf05};
         {config[software][vcftools]} --gzvcf {input.miss06} --maf 0.01  --recode --recode-INFO-all --stdout |pigz -p 2 -c > {output.miss06_maf01} 2> {log.miss06_maf01}
         """
+
+

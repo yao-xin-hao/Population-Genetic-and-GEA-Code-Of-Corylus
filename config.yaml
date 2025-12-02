@@ -1,0 +1,8 @@
+software:
+    gatk: /data/00/user/user153/software/gatk4.2.0/gatk
+    bcftools: /data/00/user/user250/software/bcftools-1.10/bcftools
+    vcftools: /data/00/software/vcftools/vcftools-vcftools-954e607/vcftools
+reference.fai: genome/reference.fasta.fai
+sample.txt: sample.txt
+depth.txt: depth.txt
+bed: All.repeat.merge.bed

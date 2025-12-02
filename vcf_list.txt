@@ -1,0 +1,2 @@
+-V g.vcf/lu01.g.vcf.gz
+-V g.vcf/lu02.g.vcf.gz
