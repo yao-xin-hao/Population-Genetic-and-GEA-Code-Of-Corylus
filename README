@@ -71,3 +71,9 @@ all_bio.csv
 grep_filter_bio_from_cor_all.py
 RDA_v2_use_all_RDA.R
 0.8_select_env
+
+########################concat####################
+python intersect_snp.py RDA.load.score.txt GK.pmap output.txt threshold
+
+#File
+intersect_snp.py
