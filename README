@@ -1,6 +1,28 @@
-# Population-Genetic-and-GEA-Code-Of-Corylus
-The Full Process from SNP Calling to Environmental Association
-Brach
-01.call_snp------A snakemake flow for gatk
-02.script_process_for_vcf------some script process vcf
-03.population_structure------PCA、nj tree、admixture by vcf
+#IBD—IBE analysis 
+#地理隔离和环境隔离
+
+#1从vcf.gz文件提取适应性vcf和中性vcf
+cd CC;bcftools view -i'ID=@adapt_snp.txt' -Oz -o adapt.vcf.gz ID.str.sort.vcf.gz ;cd ..;cd ..
+cd CC;bcftools view -e'ID=@adapt_snp.txt' -Oz -o neterl.vcf.gz ID.str.sort.vcf.gz ;cd ..;cd ..
+
+#2.重新命名vcf，为了跑窗口fst
+cd CC;bash ../rename_vcf.sh adapt.vcf.gz adapt_rename.vcf.gz;bash ../rename_vcf.sh neterl.vcf.gz neterl_rename.vcf.gz ;cd ..
+
+#3.计算fst矩阵，生成adaptive_fst_matrix.txt和neutral_fst_matrix.txt
+cd CC;python3 ~/scripts/IBD_IBE/03.count_fst_for_IBD_IBE.py ;cd ..
+
+#4，计算环境矩阵的前置文件，用的sample_class.txt all_bio_sorted.txt，生成group_bio.csv
+python3 ~/scripts/IBD_IBE/04.average_bio_by_group.py
+Rscript 清除负值.r
+Rscript 修改一致性矩阵.r
+
+#5、plot IBD and IBE MATEL
+Rscript 6IBD&IBE.R
+
+#6、boxplot
+Rscript 计算关联结果的fst和常规fst.r
+
+#计算结果应该有两个矩阵文件，还环境文件
+用下面的IBD_IBE.R脚本计算环境隔离和地理隔离
+#所有的矩阵排列要一致
+#需要分亚群跑，理论上不分亚群地理隔离应该要比分亚群强烈
