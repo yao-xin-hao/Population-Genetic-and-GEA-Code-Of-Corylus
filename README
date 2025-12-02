@@ -7,6 +7,7 @@ Some steps involve third‑party software; if citation is required, please refer
 Branch Overview
 
 01. call_snp
+https://github.com/yao-xin-hao/Population-Genetic-and-GEA-Code-Of-Corylus/tree/01.call_snp
 A Snakemake workflow for SNP calling based on the GATK pipeline.
 This branch processes raw BAM files into high‑quality VCF files, including:
 1、GATK best‑practice variant discovery
@@ -14,7 +15,8 @@ This branch processes raw BAM files into high‑quality VCF files, including:
 3、Custom helper scripts
 4、Generation of high-quality SNP sets
 
-02. script_process_for_vcf
+02. script_process_for_vcf:https
+https://github.com/yao-xin-hao/Population-Genetic-and-GEA-Code-Of-Corylus/tree/02.script_process_for_vcf
 A collection of useful scripts for VCF processing.
 Main purpose:
 1、Filling missing SNPs
@@ -22,6 +24,7 @@ Main purpose:
 4、Preparing VCF files for downstream analyses
 
 03. population_structure
+https://github.com/yao-xin-hao/Population-Genetic-and-GEA-Code-Of-Corylus/tree/03.population_structure
 Workflows and scripts for population structure analysis starting directly from VCF input.
 Includes both analysis and visualization:
 1、PCA
@@ -30,6 +33,7 @@ Includes both analysis and visualization:
 4、Results from these methods are combined to infer population structure.
 
 04. GEA (Environmental Association Analysis)
+https://github.com/yao-xin-hao/Population-Genetic-and-GEA-Code-Of-Corylus/tree/04.GEA
 Scripts and workflows for environmental association studies.
 Includes:
 1、Extraction and processing of environmental variables
@@ -37,6 +41,7 @@ Includes:
 3、RDA workflow (considers multiple environmental predictors)
 
 05. IBD_IBE (Isolation by Distance / Environment)
+https://github.com/yao-xin-hao/Population-Genetic-and-GEA-Code-Of-Corylus/tree/05.IBD_IBE
 Scripts for evaluating geographic and environmental isolation using VCF input.
 This branch generates:
 1、Geographic distance matrices
