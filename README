@@ -48,7 +48,6 @@ mkdir tmp
 touch sample.txt ,文件中包含样本名.
 cp -r /data/00/user/user250/my_snakemake/gatk/scripts .
 ################################生成bam############################################
-最好按以下实验室的流程来，如果产生文件有不同命名需要更改Snakefile中对应的名字
 #1...................clean   需要sample.txt, mkdir一个clean
 for i in `cat sample.txt`;do echo "/data/00/software/fastp/fastp_20190417/fastp -q 20 -l 50 -W 4 -5 -3 -h  /mnt/disk1/backup/yang/user250/01.clean/${i}.report.html -w 10 -i /mnt/disk1/backup/yang/user250/00.reads/${i}_1.fq.gz -o /mnt/disk1/backup/yang/user250/01.clean/${i}_1.clean.fq.gz -I /mnt/disk1/backup/yang/user250/00.reads/${i}_2.fq.gz -O /mnt/disk1/backup/yang/user250/01.clean/${i}_2.clean.fq.gz > /mnt/disk1/backup/yang/user250/01.clean/${i}.report.log 2>&1" >>clean.sh;done
 
