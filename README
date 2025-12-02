@@ -64,7 +64,7 @@ snakemake --core ?? -p -s Snakefile
 snakemake --core ?? -p miss_maf/sp.miss08.vcf.gz 这个文件看Snakefile中想要的output那一步
 
 #####################无端插入#########################
-#2..........mapping 需要师兄的脚本/mnt/disk1/backup/yang/user250/02.map/1.map_sambamba.pl ；mkdir tmp map ; mkdir 02.map ;clean.list为第一步clean完的所有样本绝对路径
+#2..........mapping 脚本/mnt/disk1/backup/yang/user250/02.map/1.map_sambamba.pl ；mkdir tmp map ; mkdir 02.map ;clean.list为第一步clean完的所有样本绝对路径
 perl /data/01/user153/hazel_2022_2/02.map/1.map_sambamba.pl -l clean.list -o /mnt/disk1/backup/yang/user250/02.map/map -R /mnt/disk1/backup/yang/user250/00.ref_pzel/final.fasta -T /mnt/disk1/backup/yang/user250/tmp  >> map.sh
 
 parallel -j 30 < map.sh
