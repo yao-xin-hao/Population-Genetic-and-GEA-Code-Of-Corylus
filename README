@@ -51,3 +51,23 @@ Rscript plot.R
 
 
 ########################RDA####################
+#1、数据准备-从all_bio到sample_bio
+#计算自相关
+Rscript /data/00/user/user250/scripts/for_RDA/01.enviroment_v3.R all.bio.csv
+#筛选环境因子
+python3 /data/00/user/user250/scripts/for_RDA/02.select_envs.py cor_betweenenvs.txt 0.8 > 0.8_select_env
+#根据筛选出来的环境因子从pzel.bio.csv提取相应的（all.bio.08.csv）
+python3 /data/00/user/user250/scripts/for_RDA/grep_filter_bio_from_cor_all.py 0.8_select_env all.bio.csv all.bio.08.csv
+#排序
+python3 /data/00/user/user250/scripts/for_RDA/sort_diff_file_by_same_sample.py sample_order.csv all.bio.08.csv
+#running
+Rscript /data/00/user/user153/script/15.gene_with_enviroment/RDA/RDA_for_short_size/RDA_v2_use_all_RDA.R  Corylus.raw.csv all.bio.08.csv 2 Chr >log.log 2>&1
+
+#File required to run RDA
+01.enviroment_v3.R
+02.select_envs.py
+all.bio.08.csv
+all_bio.csv
+grep_filter_bio_from_cor_all.py
+RDA_v2_use_all_RDA.R
+0.8_select_env
