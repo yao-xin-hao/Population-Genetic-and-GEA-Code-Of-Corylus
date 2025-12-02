@@ -1,0 +1,1 @@
+perl zz.admixture_pca_nj.pl P /data/01/p1/user250/project/cor_adapt/071.keep_structure/PCA/CC ID.str.sort.vcf.gz > log.log 2>&1
