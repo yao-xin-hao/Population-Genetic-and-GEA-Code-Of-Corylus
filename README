@@ -1,9 +1,9 @@
-####################################################################################################################################################
+########
 Population-Genetic-and-GEA-Code-Of-Corylus
-####################################################################################################################################################
+########
 The full workflow from SNP calling to population genetics and environmental association analyses.
 Some steps involve third‑party software; if citation is required, please refer to the related GitHub pages or contact me.
-####################################################################################################################################################
+########
 Branch Overview
 
 01. call_snp
