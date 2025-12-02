@@ -32,7 +32,7 @@ Includes both analysis and visualization:
 3、Admixture analysis
 4、Results from these methods are combined to infer population structure.
 
-04. GEA (Environmental Association Analysis)
+04. GEA (Genotype-Environment Association)
 https://github.com/yao-xin-hao/Population-Genetic-and-GEA-Code-Of-Corylus/tree/04.GEA
 Scripts and workflows for environmental association studies.
 Includes:
