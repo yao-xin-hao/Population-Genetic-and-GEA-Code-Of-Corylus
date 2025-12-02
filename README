@@ -1,6 +1,53 @@
-# Population-Genetic-and-GEA-Code-Of-Corylus
-The Full Process from SNP Calling to Environmental Association
-Brach
-01.call_snp------A snakemake flow for gatk
-02.script_process_for_vcf------some script process vcf
-03.population_structure------PCA、nj tree、admixture by vcf
+#GEA
+
+########################LFMM####################
+#1、plink:vcf2raw
+plink --vcf cz.phase.id.vcf.gz --recodeA --out cz
+#2、raw2csv
+cat cz.raw | python3 -c 'import re,sys;line=re.sub(" ",",",sys.stdin.read());print(line,end="")' > cz.raw.csv
+#3、create order file
+cut -f 1 Corylus.nosex > sample_order.csv
+#4、sort environment file
+python3 /data/00/user/user250/scripts/for_RDA/sort_diff_file_by_same_sample.py sample_order.csv bio_results.txt
+#5、csv2lfmm
+python3 /data/00/user/user250/scripts/for_RDA/raw2geno.py cz.raw.csv >lfmm.genotype 
+#6、split environment
+python3 /data/00/user/user250/scripts/lfmm/extract_bio_from_all_bio.py bio_results.txt
+#7、ln -s lfmm.genotype in split environment folder
+#8、running
+parall -j 10 < /data/01/p1/user250/project/cor_adapt/08.IFMM/CC/run_lfmm.sh
+
+#prepare bio file
+for_HKA.csv
+get_bio_from_tif-bio.R
+get_bio_from_tif-soil.R
+get_bio_from_tif-srad.R
+
+#File required to run lfmm
+bio_results.txt
+extract_bio_from_all_bio.py
+raw2geno.py
+run_lfmm.sh
+sort_diff_file_by_same_sample.py
+FDR.R
+plot.R
+
+#prepare Visualization file
+#1、average zcore
+sh average.sh
+
+#zscore2GK.pmap
+for i in {1..19}
+do ;cd bio${i}; cut -d " " -f 3 bio${i}.out1_s1.1.zscore > 1 ;cd .. ;done
+for i in {1..19}
+do ;cd bio${i}; paste ../pz.name  1 > 2 ;cd .. ;done
+for i in {1..19}
+do ;cd bio${i};awk -F "[\t_]" 'BEGIN{OFS="\t"} {print $1"_"$2,$1,$2,$3}' 2 > GK.pmap ;rm 1 2  ;cd .. ;done
+for i in {1..19}
+do ;cd bio${i};cut -f 1,4 GK.pmap |sort -k 2g > p.value; Rscript /data/00/user/user250/scripts/lfmm/FDR.R p.value ;cd .. ;done
+
+#manhatt
+Rscript plot.R
+
+
+########################RDA####################
